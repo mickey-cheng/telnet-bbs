@@ -60,11 +60,12 @@ cd ~/kbsbbs_src
 
 - 方式一：下载快照包（假设有 tar.gz 包）
   ```
-  wget http://example.com/kbsbbs-latest.tar.gz
-  tar zxvf kbsbbs-latest.tar.gz
-  cd kbs_bbs
+  wget https://codeload.github.com/mickey-cheng/telnet-bbs/zip/refs/heads/main
+  unzip telnet-bbs-main.zip
+  cd /telnet-bbs-main/kbs_bbs/
   ```
-- 方式二：使用 git/svn（如有仓库地址，按实际情况操作）
+- 方式二：使用 git/svn
+  git clone https://github.com/mickey-cheng/telnet-bbs.git
 
 ### 3.2 检查站点定制文件
 

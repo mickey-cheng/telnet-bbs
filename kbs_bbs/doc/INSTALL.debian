@@ -1,0 +1,47 @@
+$Id$
+
+kbsbbs 在 Debian GNU/Linux 上的安装指南（仅支持telnet/ssh，无web功能）
+
+本文介绍了 Debian GNU/Linux 上 kbsbbs 的编译和安装，适用于新版Linux（如Debian 12），所有web相关功能已彻底移除，仅保留telnet/ssh核心。
+
+0. ChangeLog
+2024.06.xx
+  彻底移除web相关内容，仅保留telnet/ssh，补充新版Linux兼容性修正说明。
+
+1. 必要依赖（仅telnet/ssh核心功能）：
+--------------------------------------
+zlib1g-dev              必需
+autoconf                必需
+automake                必需
+libtool                 必需
+gcc                     必需
+make                    必需
+
+# ssh支持（可选）
+libgmp-dev              可选（ssh支持）
+openssl                 可选（ssh/pop3d支持）
+
+# 其余web、php、apache、mysql等依赖已全部删除，无需安装。
+
+2. 安装流程
+--------------------------------------
+（其余内容与INSTALL.debian12保持一致，详见INSTALL.debian12）
+
+3. 新版Linux兼容性修正说明
+========================
+本版本已针对GCC 11+/Clang 14+等新一代Linux发行版（包括Debian 11/12等）做了最小必要的兼容性修正，主要包括：
+- 所有bzero全部替换为memset
+- 所有bcopy全部替换为memmove
+- 所有rindex全部替换为strrchr
+- 移除了<malloc.h>，仅保留<stdlib.h>
+- u_char、socklen_t等类型如未定义则补充typedef
+- 头文件包含和信号宏做了适配性调整
+- 其余如遇编译报错再做最小必要修正
+
+如需详细说明请参见doc/INSTALL。
+
+4. 其它
+--------------------------------------
+- 仅支持telnet/ssh登录，不含web服务、php、mysql等功能。
+- 其它问题请到水木社区 (newsmth.net) BBSMan_Dev 版讨论。
+

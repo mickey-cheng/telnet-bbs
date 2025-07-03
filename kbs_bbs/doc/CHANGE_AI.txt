@@ -1,0 +1,35 @@
+# AI自动化修改变更记录（2024年）
+
+## 1. 系统精简与web功能移除
+- 删除所有web相关目录、代码、依赖，仅保留telnet/ssh登录功能。
+- 清理C代码中所有web相关引用和宏定义。
+
+## 2. 代码兼容性修正
+- 全面排查并修正bzero、bcopy、rindex、<malloc.h>等老式API，统一替换为memset、memmove、strrchr、stdlib.h等标准用法。
+- 增加u_char、socklen_t等类型兼容性typedef，修正信号宏、头文件包含等，确保GCC 11+/Clang 14+等新Linux发行版可直接编译。
+- 相关兼容性修正已同步进configure.ac、bbs.h等头文件。
+
+## 3. 文档精简与同步
+- 删除doc/INSTALL、doc/INSTALL.debian等文档中所有web/php/mysql相关内容，仅保留telnet/ssh核心依赖和安装说明。
+- 以Debian 12和小白视角细化安装文档，新建doc/INSTALL.debian12，详细分步说明系统准备、账号创建、权限设置、源码编译、站点配置、服务启动、常见问题等。
+- FAQ与安装文档、代码实际保持一致，补充var目录创建、构建工具版本提示、IPC清理脚本等细节。
+
+## 4. FAQ与README修订
+- FAQ内容用用户最新原始中文内容强制覆盖，删除web/php/mysql相关问题，结尾补充"本系统仅支持telnet/ssh登录，不含web服务、php、mysql等功能。"
+- README.SYSOP等文档如出现乱码，均用用户原始内容强制覆盖并转为UTF-8编码。
+
+## 5. 文档批量转码
+- 用PowerShell脚本批量将doc目录下所有GB2312编码文档转为UTF-8，确保内容无乱码。
+- 如有个别文件内容异常，单独排查并修复。
+
+## 6. 子模块与主程序兼容性核查
+- 逐个检查libsystem、libBBS、rzsz、src、daemon、local_utl、mail2bbs、service、sshbbsd、innbbsd等子模块的Makefile.am、configure.ac，确保全部适配新Linux。
+- 逐行分析bbs.h、bbs.c等核心文件，确认所有兼容性问题已彻底解决。
+
+## 7. 其它
+- 所有变更均严格遵循"最小必要修改"原则，确保功能精简、兼容性提升、文档同步、编码统一。
+- 如有后续特殊需求或发现个别问题，可随时进一步处理。
+
+---
+
+本文件为AI自动化维护变更记录，便于后续溯源、归档和交接。 

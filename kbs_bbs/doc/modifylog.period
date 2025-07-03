@@ -1,0 +1,35 @@
+2000-09-10 :
+bm.c --> deny_user() --> �����жϷ��ʱ���Ƿ񵽴�
+
+2000-09-10 :
+read.c --> i_read() --> �����б����������ֵ���ʾ��༭����.
+
+2000-09-11 :
+read.c --> sread() --> �����ж�ansimore()�ķ���ֵ
+	���ͬ�����Ķ���һ����ʾ����
+
+2000-09-11 :
+comm_lists.c --> syscmd_str ������FavBoard()���
+boards.c --> ����,�޸Ĺ���FavBoard�Ĵ���
+
+2000-09-21 :
+record.c --> delete_file �����ж�fstat(..)����ֵ.
+             ����.DIR��ʧ��ftruncate(0)�й�.
+
+2000-10-19 :
+newmain.c --> ��¼���˳�ʱ��usies�ļ���д��utmpent��usernum, ����"��������"
+              ��"���󸲸��ʺ�"��Ǳ��Bug.
+2000-10-20 :
+talk.c --> modestring() �滻�����е���get_user()�Ĵ���, ����IO.
+           ���Ӻ���isidhidden() ( ��Ϊishidden()��Ҳ������get_user() )
+bcache.c --> ���Ӻ���getuserid()
+more.c, record.c --> �����˼������ܺ��Ե�close(fd).
+
+2000-10-20 :
+list.c --> �Ķ������û��б�����ʾ��ʽ, ���û�������1000ʱ����ֶ�Ӧ�ø���λ.
+
+2000-10-26 :
+help.c --> show_help() �����ظ�����.
+record.c --> ���Ӻ���search_record_back()
+bbs.c --> mark_post() ���Ķ���ֹ�ര�ڼ����ݲ�ͬ��ʱ���󸲸�.DIR
+

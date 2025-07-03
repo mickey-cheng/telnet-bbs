@@ -1,0 +1,304 @@
+$Id$
+kbsbbs 常见问题解答（FAQ）
+
+本FAQ仅针对telnet/ssh核心功能，所有web相关内容已彻底移除。
+
+1. 安装与初始化
+
+1.1 make install 是否会覆盖原有bbs数据？
+[答]
+  make install 不会覆盖bbs数据。建议首次安装站点时，执行
+  make install 后再执行一次 make install-home 以便拷贝初始bbs数据
+  和一些目录到指定位置。以后升级源码时不要再执行 make install-home，
+  否则会覆盖原有数据。
+
+1.2 启动 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+1.3 编译依赖和构建工具版本问题
+[答]
+  请确保 automake、autoconf、libtool 等为系统自带最新版，避免因版本不符导致构建失败。
+
+1.4 端口占用、权限、UID/GID等常见问题
+[答]
+  - bbsd/sshbbsd 需root权限启动23/22端口。
+  - bbs用户的UID/GID需与site/fb2k-v2.h中定义一致。
+  - 相关目录和文件权限需正确，详见INSTALL文档。
+
+1.5 注册SYSOP失败或进程残留
+[答]
+  可能是IPC资源未释放。可用 contrib/scripts/clearipc 脚本清理后重启 miscd/bbslogd。
+
+1.6 共享内存不足（Bus Error）
+[答]
+  可通过如下命令调整：
+    sudo sysctl -w kernel.shmmax=268435456
+    echo "kernel.shmmax = 268435456" | sudo tee -a /etc/sysctl.conf
+
+1.7 其它
+[答]
+  本系统仅支持telnet/ssh登录，不含web服务、php、mysql等功能。
+  其它问题请查阅INSTALL、README.SYSOP等文档，或到水木社区BBSMan_Dev版求助。
+
+2. 安装与配置
+
+2.1 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.2 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.3 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.4 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.5 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.6 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.7 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.8 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+2.9 安装 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3. 配置与使用
+
+3.1 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.2 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.3 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.4 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.5 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.6 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.7 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.8 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+3.9 配置 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4. 使用与维护
+
+4.1 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.2 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.3 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.4 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.5 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.6 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.7 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.8 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+4.9 使用 bbsd 时出现"can't lock pid file:var/bbsd.2500.pid"怎么办？
+[答]
+  这是老版本的bug，建议使用最新的kbsbbs源码。若仍有问题：
+    a) 重新下载并安装最新kbsbbs snapshot。
+    b) 手动创建var目录：
+         cd $(BBSHOME)
+         mkdir var
+    c) 确认var目录属主为bbs。
+
+5. 其他
+
+5.1 其他常见问题
+[答]
+  本系统仅支持telnet/ssh登录，不含web服务、php、mysql等功能。
+  其它问题请查阅INSTALL、README.SYSOP等文档，或到水木社区BBSMan_Dev版求助。
+

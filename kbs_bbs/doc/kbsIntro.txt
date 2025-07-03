@@ -1,0 +1,782 @@
+$Id$
+
+������: atppp
+��  ��: [kbsIntro] kbs ϵͳ����
+����վ: http://dev.kcn.cn/
+
+0. ��
+
+0.0 ����
+
+���� kbs ϵͳ�������ݽṹһ����ٱ仯�����Ǳ��ĵ�ֻ��� kbs SVN ����֧Ŀǰ�Ĵ��룬����֤������ʱ���������֧�������ȷ�ԣ�Ҳ���Կ�����ɵ��κκ�����𡣱��Ŀ���������������ת�أ����뱣��ȫ�ĵ������ԡ�
+
+0.1 ����˵��
+
+������һЩ�����ݽṹ��˵����������ṹ������ src/struct.h �У�char[] ���ֶ������ر�˵�������� '\0' �������ַ������Ա��Ļ������������ʣ���ӭ��ˮľ���� (newsmth.net) BBSMan_Dev �����ۡ�
+
+
+
+1. ���漰����
+
+1.1 ���µĴ洢
+
+ÿ�����涼��һ��Ŀ¼������ SYSOP ���Ŀ¼�� $BBSHOME/boards/SYSOP/�������Ŀ¼�����������������¼�������ÿһƪ���¶���һ���ļ����ļ��������������ӣ�
+
+M.1085385291.w0
+             ^^ ��������ͬһ��ʱ���Ķ������
+  ^^^^^^^^^^ 10 λ���� timestamp�����ӷ���ʱ��
+^ M ���ļ���ǰ׺����ͬ���ʵ��ļ���ǰ׺�Ͳ�һ��
+
+�����Ǹ����������ļ�����Ӧ�ļ�����ǰ׺����ͨ������£�
+��������   .DIR        M
+�ö�����   .DINGDIR    Z ��Ӳ���ӵ���Ӧ M ǰ׺�ļ���
+��ժ��     .DIGEST     G ��Ӳ���ӵ���Ӧ M ǰ׺�ļ���
+����վ     .DELETED    D
+��ֽ¨     .JUNK       J
+
+ͬ����ģʽ�����ڰ���Ŀ¼�����һ�� .ORIGIN �ļ�������ļ����� .DIR �ļ���������ԭ����id==groupid���ο� 1.3 �ڣ��� fileheaders��
+
+���⣬�� $BBSHOME/vote/ ����ÿ������Ҳ����һ��Ŀ¼����Ҫ���ڴ���ͶƱ�����ݣ����� KCN �ľ��񣬽����ò�Ҫ���� vote Ŀ¼�´��������Ϣ��
+
+
+1.2 ��������������fileheader �ṹ
+
+ÿ�������ļ����Ƕ�� fileheader �ṹ����� fileheader ������ src/default.h ���� src/site.h ���棬����������£�
+
+typedef struct fileheader {
+    char filename[FILENAME_LEN];
+        ���ӵ��ļ������ȷ� 1.1 ���Ǹ����ӣ�����ֶξ��� M.1085385291.w0��
+        kbs Ҳ���Բ��ð���Ŀ¼�� 52 ����Ŀ¼��ɢ�������ӵķ������ο�
+        feeling.h �� GET_POSTFILENAME �궨�壩����������£����ֶε���ʽ
+        ���� A/M.1085385291.w0��
+    unsigned int id, groupid, reid;
+        ������ id �ֶηǳ���Ҫ������һ�ھ���˵����
+    int o_bid;
+    unsigned int o_id;
+    unsigned int o_groupid;
+    unsigned int o_reid;
+        �����ĸ��ֶ���������˵����º��Ƽ����£�o_bid ��ԭ�ĵİ��� bid��
+        ����������ԭ����ԭ���� .DIR ����Ӧ������ id �ֶ�ֵ��
+    char innflag[2];
+        �����Ƿ�ת�š�"LL" ��ʾ���ط�����"SS" ��ʾת�ţ�"\0M" ��ʾ����
+        ת���������¡�
+    char owner[OWNER_LEN];
+        �������ߡ�
+    unsigned int eff_size;
+        ���ӵ���Ч�ֽ�����
+    time_t posttime;
+        ���ӷ���ʱ��� timestamp����ʹ�� 52 ����Ŀ¼��ɢ�������ӵ�����¸�
+        �ֶ�������Ҫ��
+    long attachment;
+        ����λ��ƫ�������ο�����ĸ�����ʽ��
+    char title[ARTICLE_TITLE_LEN];
+        ���ӵı��⡣ע�ⳬ��������Ҫ�ض̡�
+    unsigned short replycount;
+        �������Ļظ������� .DIR �� .ORIGIN ��ͬ�����£���������ģʽ�ͷ�����
+        �������ֶ����á�
+    char unused[114];
+        û���õ���Ϊ�˽�����Ҫ�����ýṹ��ʱʡȴת���������鷳����������ط���
+    unsigned char accessed[4];
+        һЩ���ӵ����ԣ�ǰ����Ԫ���� bitwise-OR �����ԣ�������
+        accessed[0]: FILE_SIGN     (0x01) �������õ� # ���
+                     FILE_TOTAL    (0x02) �ѱ������ϼ�
+                     FILE_PERCENT  (0x04) �������õ� % ���
+                     FILE_MARKED   (0x08) �� m ������
+                     FILE_DIGEST   (0x10) ��ժ�����ӣ��� g �����ӣ�
+                     FILE_IMPORTED (0x80) �ѱ���¼����
+        accessed[1]: FILE_READ     (0x01) ���� re
+                     FILE_DEL      (0x02) �������ɾ�� X
+                     FILE_MAILBACK (0x04) ������������
+                     FILE_COMMEND  (0x08) �ѱ��Ƽ�����
+                     FILE_CENSOR   (0x20) FILTER �������������
+                     FILE_TEX      (0x80) tex ��ʽ��������
+        accessed[3]: ����վ�� .DIR ������ֶ�Ϊ��
+                     ɾ��ʱ�� timestamp / (3600 * 24) % 100
+                     ��Ҫ���ڶ�ʱɾ���ϵ�ɾ����
+} fileheader;
+
+
+1.3 id, groupid, reid �����ֶ�
+
+�������ֶ������ӵ����� ID ��ͬ������Ϣ��.DIR ���� fileheader �ṹ�� id �ֶ����ε�����ע��һ���ǵ��������� web ������᲻���������������ֶε����þ������£�
+
+�����·��������� A���������ϵͳ�Զ����� id = 10
+Ȼ�����˻ظ����� A�����ǽ������� B��
+�����˻ظ������� B�����ǽ������� C��
+������˻ظ����� A����Ϊ���� D�����ĸ����ӵ������ֶλ���������
+
+����    id      groupid     reid
+================================
+ A      10      10          10
+ B      11      10          10
+ C      12      10          11
+ D      13      10          10
+
+���У�groupid ���������ж�����ͬ����ģ�ע�⣬����ͬ��������ӱ����޹ء�reid ���������ظ����ṹ��
+
+
+1.4 �����ṹ
+
+���������ݾ����������������ӵ��Ǹ��ļ���ĩβ���и����������ļ�������ǣ��������ģ������һ���س�����������һ����������...����ÿ�������������ĸ�������ɵģ�
+*) ��һ���֣��˸� '\0' �ֽڡ�
+*) �ڶ����֣�������ԭʼ�ļ����ַ��������Ժ��������ַ������Ȳ�Ӧ�ó��� 40 ����
+   �����ļ����ĺ�׺�������������͡������ֳ��Ȳ���������ǧ��Ҫ�������� '\0'
+   �ַ�����������
+*) �������֣��ĸ��ֽڣ�unsigned int �����Ƹ�ʽ��������ʾ�������ĳ��ȣ�
+   ע����������������ֽ���big-endian���洢��Ҳ�� MSB ���ȡ�
+*) ���Ĳ��֣������Ƹ�ʽ�������������������ֳ����ɵ������־�����
+���⣬��������� .DIR ������Ӧ���Ǹ� fileheader �ṹ�� attachment �ֶ�Ӧ������Ϊ��һ�������ε���ʼƫ������ftell�����ο���
+libBBS/article.c upload_post_append() �� get_mimetype() ����
+
+
+1.5 .BOARDS �ļ���boardheader �ṹ
+
+$BBSHOME/.BOARDS �ļ������а������Ϣ��ʵ������ MAXBOARD �� boardheader �ṹ���� kbs ϵͳ�ڲ�ÿ�����涼��һ������� bid����� bid ���Ǹð����� .BOARDS �����λ�ã�ע�������� 1-based �ġ�
+
+struct boardheader {
+    char filename[STRLEN];
+            �����Ӣ�����ƣ�STRLEN �� 80
+    char BM[BM_LEN];
+            �����б���BM_LEN �� 60����������ÿո����
+    char title[STRLEN];
+            �����˵������ʽ�� a[bbbb]ccccccdddd...
+                a: ����������
+                bbbb: ����������
+                cccccc: ת�ű�ǩ��һ������Ϊ�����ո�
+                dddd....: ������˵����Ҳ��ͨ����˵�İ�����������
+            �ȷ���
+                0[վ��]      �����ð�
+    unsigned level;
+            �����ȡȨ�ޡ�
+    unsigned int idseq;
+            ��ǰ�Ѿ�ʹ�õ��� id ֵ���ο� boardstatus �ṹ nowid �ֶΡ�
+    unsigned int clubnum;
+            ���ֲ���š�0 ��ʾ������治�Ǿ��ֲ���
+    unsigned int flag;
+            �����һЩ���Աȷ��Ƿ����ת�š�
+    union {
+    unsigned int adv_club;
+    unsigned int group_total;
+    } board_data;
+    time_t createtime;
+            ���洴��ʱ�䣬���¿����������������õ���
+    int unused;
+    char ann_path[128];
+            ������·����ʵ�ʾ���������·���ǣ�
+            $BBSHOME/0Announce/groups/<ann_path>
+    int group;
+            ����Ŀ¼��
+    char title_level;
+            �趨�û���Ҫʲô���ݿɼ�������档0 ��ʾû�����ơ�
+    char des[195];
+            ��������,���� www �İ���˵���Ͱ��泬��������
+#ifdef FLOWBANNER
+    int bannercount;
+    char banners[MAXBANNER][BANNERSIZE];
+#endif
+};
+
+
+
+2. �û�
+
+2.1 ʲô���� ID �� kbs ϵͳ���ǺϷ���
+
+kbs ϵͳ�Ϸ� ID �Ĺ����ǣ����� 2 ���ַ������� 12 ���ַ�����һ���ַ���������ĸ��������ַ���������ĸ�������֡�
+
+
+2.2 �û���ص��ļ�ϵͳ�ṹ
+
+$BBSHOME/.PASSWDS ���û��ʺŻ�����Ϣ��ʵ������ MAXUSERS �� userec �ṹ���ṹ˵��������ϸд�����⣬ÿ���û�����һ�� home Ŀ¼��һ���ż�Ŀ¼���ȷ� atppp �û�������Ŀ¼�ֱ��� $BBSHOME/home/A/atppp/ �� $BBSHOME/mail/A/atppp/���û� home Ŀ¼����һЩ�����Ӱ˵��ļ���������һ���ļ����� .userdata��������û��ʺŵĲ�����Ϣ��ʵ���Ͼ���һ�� userdata �ṹ���ṹ˵��������ϸд���ż�Ŀ¼������һ���½���˵��
+
+
+2.3 userec �ṹ
+
+struct userec {
+    char userid[IDLEN + 2];
+        �û�����IDLEN �� 12����Ҫ�����޸ġ�
+    char flags;
+        һЩ��־����������������֮��ġ�ת���û��������ó� 0x81��Ҳ����
+            PAGER_FLAG | CURSOR_FLAG
+        �ο�Դ���� contrib/fb2k2smth/README ���˵����
+            #define PAGER_FLAG   0x1        /* true if pager was OFF last session */
+            #define CLOAK_FLAG   0x2        /* true if cloak was ON last session */
+            #define BRDSORT_FLAG 0x20       /* true if the boards sorted alphabetical */
+            #define CURSOR_FLAG  0x80       /* true if the cursor mode open */
+            #define GIVEUP_FLAG  0x4        /* true if the user is giving up  by bad 2002.7.6 */
+            #define PCORP_FLAG   0x40       /* true if have personalcorp */
+    unsigned char title;
+        �û�����
+    time_t firstlogin;
+        ע��ʱ����ߵ�һ�ε�¼��ʱ�����
+    char lasthost[16];
+        ����¼�� IP��
+    unsigned int numlogins;
+        ��¼������
+    unsigned int numposts;
+        ��������
+#ifdef CONV_PASS
+    char passwd[OLDPASSLEN];
+    char unused_padding[2];
+#endif
+    char username[NAMELEN];
+        �û��ǳơ�
+    unsigned int club_read_rights[MAXCLUB>>5];
+    unsigned int club_write_rights[MAXCLUB>>5];
+        �������Ǿ��ֲ���дȨ�ޡ�������û���
+            club_read_rights[(clubnum-1)>>5]&(1<<((clubnum-1)&0x1f))
+        Ϊ�棬������û����Զ�ȡ���ֲ���Ϊ clubnum �İ��档�ο�����
+            check_read_perm() haspostperm()
+        ע����������ݽṹ������ MAXCLUB ���붨��Ϊ 32 �ı�����
+    unsigned char md5passwd[MD5PASSLEN];
+        md5 �����������롣������������һ����ϸ˵����
+        ���ַ������� 16������� '\0' ������
+    unsigned userlevel;
+        �û�Ȩ�ޡ�
+    time_t lastlogin;
+        �ϴε�¼��ʱ�����
+    time_t stay;
+        ������ʱ�䡣��λ���롣
+    int signature;
+        ��ǰʹ�õ�ǩ�������롣
+    unsigned int userdefine[2];
+        �û��Զ����������ע���û��� 0xffffffff������ wForum �ı�׼Ӧ����Ĭ��
+        �رչ�����ϸ��Ϣ��userdefine[0] ��ʵ�ʳ�ʼֵ��
+            0xFFFFFFFF & (~DEF_SHOWREALUSERDATA)
+        Ҳ���� 0xBFFFFFFF��
+    time_t notedate;
+    int noteline;
+        �����������Ͳ鿴���԰���ء�
+    int unused_atppp;
+    time_t exittime;
+        �ϴ��˳���¼��ʱ�����
+    unsigned int usedspace;
+        �û��ż�ʹ�õĴ��̿ռ䡣
+    int unused[7];
+};
+
+2.4 userdata �ṹ
+
+userdata ���û� home Ŀ¼�� .userdata �ļ��Ľṹ�������û� home Ŀ¼�»���һ���ļ��� usermemo������ mmap �ģ�������ļ�������Ҫ�� .userdata �ϸ�һ�£���� usermemo �ļ�������ϵͳ���Զ��� .userdata ������������� usermemo �����Һ� .userdata ��һ�µĻ�ϵͳ�ͻ������
+
+userdata �ṹ��
+
+struct userdata
+{
+    char userid[IDLEN + 2];
+        �û�����
+    char __reserved[2];
+    char realemail[STRLEN - 16];
+        ��ʵ email��
+    char realname[NAMELEN];
+        ��ʵ������
+    char address[STRLEN];
+        ͨѶ��ַ��
+    char email[STRLEN];
+        email��
+#ifdef HAVE_BIRTHDAY
+    char            gender;
+        �Ա�д 'M' ���� 'F'����������������ַ����ܳ�����
+    unsigned char   birthyear;
+        ������ĺ���λ��
+    unsigned char   birthmonth;
+        �����¡�
+    unsigned char   birthday;
+        �����ա����������ֶ�ע�������� unsigned char��
+#endif
+    char reg_email[STRLEN];
+        ע��ʹ�õ� email��
+/*#ifdef SMS_SUPPORT*/
+    bool mobileregistered;
+    char mobilenumber[MOBILE_NUMBER_LEN];
+/*#endif*/
+/* add by roy 2003.07.23 for wForum */
+    char OICQ[STRLEN];
+    char ICQ[STRLEN];
+    char MSN[STRLEN];
+    char homepage[STRLEN];
+    int userface_img;
+        ���ó� 0��������Զ���ͷ�����ó� -1��
+    char userface_url[STRLEN];
+        ������Զ���ͷ������� URL ��ַ��
+    unsigned char userface_width;
+    unsigned char userface_height;
+        ���������ֶ����Զ���ͷ��ĳ��Ϳ��������� 0~120 ֮���������
+    unsigned int group;
+    char country[STRLEN];
+    char province[STRLEN];
+    char city[STRLEN];
+    unsigned char shengxiao;
+    unsigned char bloodtype;
+    unsigned char religion;
+    unsigned char profession;
+    unsigned char married;
+    unsigned char education;
+    char graduateschool[STRLEN];
+    unsigned char character;
+    char photo_url[STRLEN];
+        ������Ƭ������ URL ��ַ��
+    char telephone[STRLEN];
+    char smsprefix[41];
+    char smsend[41];
+    unsigned int smsdef;
+        ������� "add by roy" �Ķ���Ŀǰֻ�� wForum �����õ���
+    int signum;
+        ǩ����������
+    int this_field_is_reserved_by_atppp;
+    time_t lastinvite;
+};
+
+2.5 ����
+
+kbs ���û�����ʹ�� md5 ���ܴ����� userec �ṹ�� md5passwd �ֶ��ڣ����� kbs ϵͳ�����Ƕ��û�����ֱ�� md5 ���ܴ�����md5passwd �ֶ����������ĸ��ַ���˳�������������ַ����� md5��
+    passmagic ���� passmagic �û���
+���� passmagic �ǣ�������ǰ���������ţ���
+    "wwj&kcn4SMTHBBS MD5 p9w2d gen2rat8, //grin~~, 2001/5/7"
+��ش����뿴 libBBS/pass.c igenpass() ������ע�� md5passwd �ֶε������� unsigned char md5passwd[16]��Ҳ������ν�� raw-binary format����������Щ md5 ���򷵻ص� 32 ���ַ����ַ�����ע��������� md5passwd �������û����������û������Ĵ�Сд֮��������¸����û��������롣
+
+
+2.6 �û� home Ŀ¼��������һЩ�ļ���˵��
+
+2.6.1 .boardrc.gz �Ѷ���¼
+
+�û� home Ŀ¼����� .boardrc.gz �洢�û����Ѷ���¼������һ��ʹ�� gzip ѹ�����ļ�����ѹ��ĳ�����
+    BRC_FILESIZE = MAXBOARD * BRC_MAXNUM * sizeof(unsigned int)��
+BRC_MAXNUM Ĭ���� 50������ļ���Ϊ MAXBOARD �Σ��� i �ξ��� bid = i ���Ǹ�������Ѷ���¼��ÿ��������Ѷ���¼���� BRC_MAXNUM ���Ǹ�������
+    n1 n2 n3 ... np 0 ... 0
+���� n1 > n2 > n3 > ... > np > 0�������Ѷ���¼�������ǣ��ð��� id > n1 �����¶���δ���ģ�id < np �����¶����Ѷ��ģ��� np <= id <= n1 �������У�ֻ��
+    id = n1,n2,n3,...,np
+�����²����Ѷ��ģ�����ȫ��δ�����Ѷ���¼������������洢�������б׵ģ����ĺô����ǱȽ���Ч�ļ�¼���û�����Ҫ���ǲ����Ѷ���¼��
+
+2.6.2 favboard �ղذ���
+
+�û��Զ������ղذ���֮������û� home Ŀ¼�´����ļ� favboard�����ļ��ĸ�ʽ���Բο� libBBS/boards.c load_myboard1() save_favboard1() ������favboard �ļ��ж��������ĸ�ʽ������ kbs ֧�ָ��ӵĶ�Ŀ¼����ղؼнṹ������ֻ˵������һ�ָ�ʽ��favboard �ļ�����������һ�����ݽṹ��
+
+struct {
+    int magic_version_number;
+        д 0x8081
+    int favbrd_list_t;
+        �ղ�Ŀ¼������д 1
+    struct favbrd_struct fav_boards;
+        ������ղذ���
+};
+
+favbrd_struct ��������ݽṹ���£�
+
+struct favbrd_struct {
+    int bnum;
+        ��Ŀ¼���ղذ���ĸ�����������һ�������ֶ��ж��ٸ�Ԫ������Ч��
+    int bid[MAXBOARDPERDIR];
+    /* bid >= 0: ����
+       bid < 0: Ŀ¼�� ��ʾ��Ŀ¼�� favbrd_list[-bid]
+       */
+       �ڲ��漰���Ŀ¼�ṹ������£�bid[i] ��ʾ��Ŀ¼�µ� i ���ղذ��棬
+       ����ǧ��ע�⣬bid[i] ����Ӧ����� bid - 1�������� bid��Ҳ����˵��
+       ���� bid[i] ���п���Ϊ 0 �ġ�
+    char title[61];
+    char ename[20];
+    int father;
+        ��Ŀ¼����ֶ�д -1��
+    int level;
+};
+
+���⣬$BBSHOME/etc/initial_favboard ����ע���û�Ĭ�ϵ��ղذ��棬��ʽ��ÿ��һ��������������ļ������ڣ�Ĭ�ϵ��ղذ����� .BOARDS �ļ�����ĵ�һ�����档
+
+2.6.3 friends �����б�
+
+���� n �� friends �ṹ���ļ���ÿ���ṹ����һ�����ѣ�
+
+struct friends {
+    char id[13];
+        ���� id
+    char exp[LEN_FRIEND_EXP];
+        ����˵�����������ա�
+};
+
+2.6.4 plans ����˵����
+
+���ûʲô��˵�ģ����Ǹ���˵��������ѯ�û���ʱ�����ʾ������
+
+2.6.5 signatures ǩ����
+
+����ļ����û�ǩ������ÿ������һ����λ��֧�� ansi ���Ʒ���wForum ����֧������ ubb��userdata �ṹ�� signum �ֶδ洢�û�ǩ����������������ִ��������recalc_signum ������������
+
+
+
+3. �û�վ���ż�
+
+�û��ż��������ż������;����ż����ݣ�ȫ��λ���û��ż�Ŀ¼�£��ο� 2.2 �ڣ���
+
+3.1 �ż�Ŀ¼�����ݽṹ
+
+�û��ż������幹�ܻ������������������¡�ÿ���ż�����һ���ļ����ļ����Ĺ������������ͨµļͬļ����� .DIR �������������£�
+
+    .DIR        �ռ���
+    .SENT       ������
+    .DELETED    ������
+
+�����������ļ��Ľṹ���������������� .DIR �Ľṹ�����ƣ�Ҳ�� n �� fileheader �ṹ�����������ֶε��������в�ͬ������������£�
+
+typedef struct fileheader {
+    char filename[FILENAME_LEN];
+        ���ӵ��ļ�����ע��� 3 ���ֽڵ��� 12 ���ֽ������ӵķ���ʱ�����
+    unsigned int id, groupid, reid;
+    int o_bid;
+    unsigned int o_id;
+    unsigned int o_groupid;
+    unsigned int o_reid;
+    char innflag[2];
+        ���ϰ˸��ֶ�û�á�
+    char owner[OWNER_LEN];
+        �Է� ID��.DIR �б�ʾ������ ID��.SENT �б�ʾ�ռ��� ID��.DELETED ����
+        ���п����Ƿ�����Ҳ�������ռ��� :(
+    unsigned int eff_size;
+        �ż���С��
+    time_t posttime;
+        �ż�����ʱ��� timestamp������û�ã������ż�Ҳ�� 52 ����Ŀ¼�洢...
+    long attachment;
+        ����ƫ������
+    char title[ARTICLE_TITLE_LEN];
+        ���ӵı��⡣ע�ⳬ��������Ҫ�ض̡�
+    unsigned char accessed[4];
+        һЩ���ԣ�bitwise-ORs flags:
+        accessed[0]: FILE_READ      (0x01) �Ѷ�
+                     FILE_REPLIED   (0x20) �ѻظ�
+                     FILE_MARKED    (0x08) �� m ���ż�
+                     FILE_FORWARDED (0x40) ��ת��
+} fileheader;
+
+�ż��������ļ��е�����û���ض��Ĺ��򣨲�������ʱ�����򣩡�
+
+3.2 �Զ�������
+
+kbs ϵͳ���������ᵽ������Ԥ���������⣬��֧���û��Զ������䡣�����Զ�������Ĵ�����Բο� libBBS/record.c load_mail_list() ������������˵�����û� home Ŀ¼����һ�� maildir �ļ����Զ�������ļ�¼���ļ��ṹ�ǣ�
+struct {
+    int mail_list_t;
+        �Զ�������ĸ���
+    char mail_list[MAILBOARDNUM][40];
+        ÿ���Զ�������ľ������ã�ÿ��������һ�� 40 ���ֽڵ��ַ�����
+        0~29 �ֽ����������ơ�30~39 �ֽ��Ǹ����������ļ��ĺ������ơ�
+        ���磬����ַ���ǰ����ǡ�KCN ���顱��30~39 �ֽ��ǡ�MAILBOX1����
+        ��ô����Զ����������ʾ���ƾ��ǡ�KCN ���顱���������ļ�������
+        ���� .MAILBOX1��ע���ļ�����һ���ַ��Ǹ�����ȥ�ĵ㡣
+};
+
+3.3 ��������
+
+���û� home Ŀ¼����һ���ļ� .mailbox.prop ���û������ѡ�����á����ļ�����һ�� int ������bitwise-ORs �������ԣ�
+
+#define MBP_SAVESENTMAIL      0x00000001 //����ʱ�����ż���������
+#define MBP_FORCEDELETEMAIL   0x00000002 //ɾ���ż�ʱ�����浽������
+#define MBP_MAILBOXSHORTCUT   0x00000004
+        //���水 'v' ʱ����: �ռ���(OFF) / ����������(ON)
+
+����û� home Ŀ¼�� .mailbox.prop �ļ������ڣ�ϵͳ�Զ�ʹ�� MBP_DEFAULT ��Ϊ����ѡ�����á�
+
+
+
+
+4. �����ڴ�ṹ
+
+�����ڴ kbs ϵͳҪڽ��̼�ͨ�š��ȷ����� web ע����֮�����Ͼ����� telnet �µ�¼�ˣ�������Ϊ web ע����Ǹ������޸�����Ӧ�Ĺ����ڴ����ݣ����� telnet ��ͼ��¼��ʱ�򣬴�������ڹ����ڴ����ҵ������Ϣ����Ȼ����Щ������ȫ�������ļ�ϵͳ�����������ù����ڴ��������̼�ͨ��Ч�ʾͻ�ߺܶࡣBBS �ĺܶ���Ҫ���ݶ��ڹ����ڴ����棬����������Ҫ��ϵͳ�ļ���
+
+$BBSHOME/.PASSWDS ������û����ʺ���Ϣ���������롣
+$BBSHOME/.BOARDS  ���а������Ϣ��
+
+��ϵͳ��������֮���������ļ�����Ϣ�ڹ����ڴ����棬ϵͳ�ᶨʱд����ͬ�����ݡ���ϵͳ�������е�ʱ��ֱ�Ӵ��������ļ��޸��ǲ��Եģ�BBS �������л����ṹ�䶯�ĸ��£�һ�����Ҫͣ�� BBS ��������������ڴ����ݡ�kbs ϵͳʹ�õ���Ҫ�����ڴ��о����£����б�ʶ�ǿ����� sysconf.ini ����Ĺ����ڴ� key�����޶�����ʹ��Ĭ�ϡ�
+
+�������          ˵��         Ҫ���������ļ�   ��ʶ��Ĭ��
+======================================================================
+bcache        .BOARDS �� mmap     bcache.c      ֻ��һ�� mmap 
+brdshm        ����״̬            bcache.c      BCACHE_SHMKEY   0xe6d
+uidshm        �û���Ϣ            ucache.c      UCACHE_SHMKEY   0xe70
+utmpshm       ��¼�û�״̬��Ϣ    utmp.c        UTMP_SHMKEY     0xe73
+utmphead      ��¼��              utmp.c        UTMPHEAD_SHMKEY 0xe72
+wwwguest_shm  wwwguest ��¼��Ϣ   bbslib.c      WWWGUEST_SHMKEY 0x1194
+publicshm     ȫ����Ϣ            stuff.c       0xe74 (*)
+
+(*) Ԯ�� bbs.h ע�ͣ�
+#define PUBLIC_SHMKEY   3700
+/*�����Ψһһ����������SHMKEY,��Ϊsysconf_eval��Ҫ
+public shm,��attach shm����Ҫsysconf_eval,ft*/
+
+
+4.1 publicshm �����ڴ�ṹ public_data
+
+struct public_data {
+    time_t nowtime;
+        ��ǰʱ�䡣BBS ϵͳ�д���ȡ��ǰʱ��ĵ��ã�ȫ��������ȡ�������Ч�ʡ�
+        ���ʱ���� miscd �е� timed ���̸����ϵͳʱ��ͻֹͣȷ web ¼Ϳ
+        ʾ¼Ƶ
+    int sysconfimg_version;
+        ǰ sysconf汾ţµ¼û sysconf.img.汾 
+        ӳļΪ˵վ˵ shift+~ Ὣֶμ 1
+        sysconf.ini  menu.ini µ sysconf.img.汾 ӳļ
+        ע web Զȡµ sysconf漰 web Ĳ޸ģȷ
+        BLOG MYSQL 룩 web
+    int www_guest_count;
+        ǰ¼ wwwguest Ŀ
+    unsigned int max_user;
+        ϵͳߵ¼ wwwguest
+    unsigned int max_wwwguest;
+        ϵͳߵ¼ʱwwwguest ¼
+        עⲻϵͳ wwwguest ¼
+
+    /* etnlegend, 2006.03.06, userscore twice sampling for high score users ... */
+    unsigned int us_sample_high[8];
+
+    unsigned int logincount;
+    unsigned int logoutcount;
+    uint64_t staytime;
+    unsigned int wwwlogincount;
+    unsigned int wwwlogoutcount;
+    unsigned int wwwguestlogincount;
+    unsigned int wwwguestlogoutcount;
+    uint64_t wwwstaytime;
+    uint64_t wwwgueststaytime;
+
+    /* etnlegend, 2006.03.06, userscore sampling ... */
+    unsigned int us_sample[32];
+
+    /* etnlegend, 2006.05.28, Ķʮ ... */
+    unsigned int top_version;
+    struct top_header{
+        int bid;
+        unsigned int gid;
+    } top[10];
+
+    char unused[712];
+    
+#ifdef FLOWBANNER
+    int bannercount;
+    char banners[MAXBANNER][BANNERSIZE];
+#endif
+    
+#ifdef FB2KENDLINE
+    time_t nextfreshdatetime;
+    char date[60];
+#endif
+};
+
+4.2 uidshmûϢڴṹ UCACHE
+
+uidshm Ľṹ UCACHE  ucache.c ڣ hash  uhashgen.h
+
+struct UCACHE {
+    ucache_hashtable hashtable;
+    ucache_hashtable hashusage;
+    int hashhead[UCACHE_HASHSIZE + 1];
+    int next[MAXUSERS];
+        ǰĸֶκû hash أһھ˵
+    time_t uptime;
+        û
+    int number;
+        ЧûһӦõ MAXUSERS
+    char user_title[255][USER_TITLE_LEN]; //ûַ
+        ûݣuser_title[0]  title Ϊ 1 û
+        Ϣ $BBSHOME/etc/title ļͬ
+    struct userec passwd[MAXUSERS];
+         .PASSWDS ļݣʱʹļͬ
+        һضûûţuidǸû .PASSWDS ļеλã
+        ע uid  1-based
+};
+
+4.2.1 UCACHE  hash ṹ
+
+ο doc/userid ĵÿûûһ hash ֵ1 ~ UCACHE_HASHSIZE ֮䣩û hash ֵhashhead  hash ͷŵǸ hash ֵĵһû uidû hash ֵͬ next ֶεݹһһûû next[uid - 1]ֵΪ 0 ʾѾβ磬ϵͳ hash ֵ h ûһuid ֱΪ uid_1 uid_2 uid_3ô hash ܻĽṹ
+uidshm->hashhead[h] = uid_1
+uidshm->next[uid_1 - 1] = uid_2
+uidshm->next[uid_2 - 1] = uid_3
+uidshm->next[uid_3 - 1] = 0
+
+⣬hashhead[0] 洢һû uid´ηûеĿû hash ֵ 0ҲƵͨ next ֶһ
+
+hashtable  hashusage ֶκ hash أϵͳʼʱ uhashgen.dat 롣
+
+
+4.3 utmpshm ¼״̬Ϣ UTMPFILE
+
+utmpshm  UTMPFILE ṹ洢¼״̬Ϣע wwwguest ṹȫûйϵ
+
+#define USHM_SIZE       (MAXACTIVE + 10)
+struct UTMPFILE {
+    struct user_info uinfo[USHM_SIZE];
+        ¼״̬Ϣÿ¼һ¼ţutmpnumǸõ¼
+        uinfo еλãע utmpnum  1-based
+};
+
+uinfo ÿһԪض洢һ¼״̬Ϣṹ user_info 壺
+
+struct user_info {              /* Structure used in UTMP file */
+    int active;                 /* When allocated this field is true */
+        ṹǰǷһ¼û
+    int uid;                    /* Used to find user name in passwd file */
+        ¼û uid
+    int pid;                    /* kill() to notify user of talk request */
+        telnet ¼ʾ̺šwww ¼Ϊ 1
+    int invisible;              /* Used by cloaking function in Xyz menu */
+        Ƿ
+    int sockactive;             /* Used to coordinate talk requests */
+    int sockaddr;               /* ... */
+    int destuid;                /* talk uses this to identify who called */
+    int mode;                   /* UL/DL, Talk Mode, Chat Mode, ... */
+        ״̬ӦøֵΪ modes.h ĳ
+    int pager;                  /* pager toggle, true, or false */
+        ״̬bitwise-OR 
+            ALL_PAGER       0x1
+            FRIEND_PAGER    0x2
+            ALLMSG_PAGER    0x4
+            FRIENDMSG_PAGER 0x8
+    int in_chat;                /* for in_chat commands   */
+    char chatid[16];            /* chat id, if in chat mode */
+    char from[IPLEN + 4];       /* machine name the user called in from */
+        ¼ IP
+    time_t logintime;
+        ¼ʱ
+    int lastpost;
+        ϴηĵʱ
+    char unused[32];
+    time_t freshtime;
+        ϴλʱ㷢ʱ䡣
+    int utmpkey;
+        ¼ key www cookie ֤ûݡ
+    unsigned int mailbox_prop;  /* properties of getCurrentUser()'s mailbox */
+        ûѡ¼ʱû .mailbox.prop ļȡο 3.3 
+    char userid[20];
+        û
+    char realname[20];
+        ʵ¼ʱû userdata ṹȡ
+    char username[40];
+        ûǳƣ¼ʱ uidshm ڴȥȡ޸ʱǳƾ޸ֶ
+    int friendsnum;
+        
+    int friends_uid[MAXFRIENDS];
+        ÿѵ uidǰ friendsnum Ч
+#ifdef FRIEND_MULTI_GROUP
+    unsigned int friends_p[MAXFRIENDS];
+#endif
+    int currentboard;
+        ǰڰ bid 
+    unsigned int mailcheck;     /* if have new mail or new msg, stiger */
+        ǰ¼ǷŻϢ
+};
+
+
+4.4 utmphead ¼ڴṹ UTMPHEAD
+
+utmphead Ľṹ UTMPHEADýṹ var.hСע wwwguest ṹȫûйϵ
+
+#define UTMP_HASHSIZE  (USHM_SIZE*4)
+struct UTMPHEAD {
+    int next[USHM_SIZE];
+    int hashhead[UTMP_HASHSIZE + 1];
+    int number;
+        ǰ¼עֲ wwwguest 
+    int listhead;
+    int list_prev[USHM_SIZE];   /* sorted list prev ptr */
+    int list_next[USHM_SIZE];   /* sorted list next ptr */
+    time_t uptime;
+        һʱ䣬¼ telnet ûʱǰʱʱ
+        120 ϣͱе¼ߵʱĵ¼ͬʱ uptime 
+        óɵǰʱ䡣
+};
+
+utmphead Ҳһ hash ṹ uidshm  hash  hash ֵǴӸõ¼û hash ֵ㣨μ utmp_hash() ǰΪ utmphash ֵ1 ~ UTMP_HASHSIZE ֮䣩hashhead[h] 洢ľǵһ utmphash ֵΪ h Ǹ¼ utmpnum¼ͬ utmphash ֵ next ֶһutmphash ˵ utmpnum һ active ¼next[utmpnum - 1] 洢õ¼ utmphash һ¼ utmpnumβ next[utmpnum - 1] == 0
+
+ûе¼ utmpshm->uinfo[utmpnum - 1].active = 0 utmphash ֵ 0еһ utmpnum  hashhead[0]Уͨ next ֶƵһڷµ¼ϵͳʱûû¼ԳʼΪ
+hashhead[0] = 1
+next[0] = 2
+next[1] = 3
+... ...
+next[USHM_SIZE - 1] = 0
+
+utmphead ڳ hash ⻹һͷβӵĻ״˫ active ĵ¼յ¼ûСУcase-insensitivelisthead ûСǸ¼ utmpnumlist_prev[utmpnum - 1]  list_next[utmpnum - 1] ֱ洢е¼Ϊ utmpnum Ԫصǰһͺһ¼ utmpnum
+
+4.5 wwwguest_shmwwwguest ûṹ WWW_GUEST_TABLE
+
+kbs ϵͳе wwwguest ¼Ǽȫһ֣ݴ洢 wwwguest_shm ڴṹΪ WWW_GUEST_TABLE
+
+#define MAX_WWW_MAP_ITEM (MAX_WWW_GUEST/32)
+
+struct WWW_GUEST_TABLE {
+    int hashtab[16][256][256];
+    int use_map[MAX_WWW_MAP_ITEM + 1];
+        use_map[i] Ĵӵ͵ߵ j  bit ʾǰ guest_entry[i * 32 + j] Ƿʹ
+    time_t uptime;
+        һʱ䣬wwwguestµ¼ʱǰʱʱ
+        240 ϣͱ wwwguest ¼ߵʱĵ¼ͬʱ
+        uptime óɵǰʱ䡣
+    struct WWW_GUEST_S guest_entry[MAX_WWW_GUEST];
+        ÿ wwwguest ¼ľϢṹ
+};
+
+struct WWW_GUEST_S {
+    int key;
+    time_t freshtime;
+        ϴλʱ㷢ʱ䡣
+    time_t logintime;
+    int currentboard;
+        ǰڰ bid
+    struct in_addr fromip;
+        Դ IP
+};
+
+
+4.6 bcachebrdshm״̬ڴṹ BCACHE
+
+ȫֱ bcache ָ .BOARDS ļ mmap ݡbcache[bid - 1] ǰΪ bid Ǹ boardheader
+
+֮⣬ÿ滹һЩ״̬Ϣȫֱ brdshm ָĹڴ棨ʶ BCACHE_SHMKEYṹ BCACHE Ϊ
+
+struct BCACHE {
+    int numboards;
+        аǸ bidҪǱȹֻѭ numboards
+        Ϊֹ뵽 MAXBOARDЧʡ
+    struct BoardStatus bstatus[MAXBOARD];
+        ״̬
+};
+
+ BoardStatus Ķǣ
+
+struct BoardStatus {            /* use this to speed up board list */
+    int total;
+        ʾʵʲΪֶûͬ
+    int lastpost;
+        һƪµ idţûǷ¾Ǵֶμ㡣
+    bool updatemark;
+        Ƿ m б䶯´û m бǷҪ²
+    bool updatetitle;
+        Ƿõб䶯´ʹ .DINGDIR ʱǷҪ²
+    bool updateorigin;
+        Ƿԭб䶯´ʹ .ORIGIN ʱǷҪ²
+    int currentusers;
+        ǰðû wwwguest
+    int nowid;
+        ðµǰѾʹõ idţעֶβһ lastpost
+        ˷Ƭ id=79,80Ȼɾ id=80 £ʱ lastpost=79
+         nowid=80ˢ .BOARDS ʱֶд .BOARDS ļӦ
+        idseq ֶԱ´ʱ롣ӵʱϵͳԶ nowid 
+        һ id ֵֶγweb ᲻
+    int toptitle;
+        ö¸
+    struct fileheader topfh[MAX_DING];
+        .DINGDIR ݣע MAX_DING Ĭ 10 .DINGDIR ڳ 10 
+        öֻᱻ 10 ʾ
+#ifdef HAVE_WFORUM
+    int todaynum;
+        ֶûãǺ
+#endif
+};
+
+
+5. ṹ
+
+kbs ϵͳĺĴ밴Ŀ¼£
+libsystem/  ϵͳײĺ⣬г򶼻
+libBBS/     һЩĺɵĿ libBBS.so
+src/        telnet 򣬾̬ libBBS.so
+sshbbsd/    ssh ʵ src/µĳһ ssh Ŀ
+daemon/     ϵͳػ̣Ӧʱ̬ libBBS.so
+php/         PHP ҳʹõĺ̬ libBBS.so
+local_utl/  Сʵó򣬶̬ libBBS.so
+

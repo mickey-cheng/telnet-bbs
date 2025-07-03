@@ -1,0 +1,148 @@
+$Id$
+                              水木代码安装指南（仅支持telnet/ssh，无web功能）
+
+    本文由 KBS 开发组负责维护，介绍了 kbs bbs 在类 Unix 操作系统(包括 Linux、FreeBSD 等)上的编译和安装，所有web相关功能已彻底移除，仅保留telnet/ssh核心。
+
+0. ChangeLog
+2024.06.xx
+  彻底移除web相关内容，仅保留telnet/ssh，补充新版Linux兼容性修正说明。
+
+1. 需要的软件
+zlib                   必须
+autoconf               必须
+automake               必须
+libtool                必须
+gcc                    必须
+make                   必须
+
+# ssh支持（可选）
+libgmp-dev             可选（ssh支持）
+openssl                可选（ssh/pop3d支持）
+
+# 其余web、php、apache、mysql等依赖已全部删除，无需安装。
+
+2. 安装
+    本节介绍 kbsbbs 的 telnet/ssh 方式在类 Unix 操作系统上的安装。注意
+本文后面给出的命令除了特别说明的之外都不需要 root 权限。
+
+2.1 一些约定
+    $(BBSHOME)         表示 bbs 的安装目录，在本文中指定为 /home/bbs
+    $(SRCDIR)          表示存放 kbsbbs 源代码的目录，可自己设
+                       定一个，例如放在自己 home 目录的某个子目录下
+
+    注意，这里提到的 $(BBSHOME) 等单词并不是 Makefile 或其他脚本语言的变量，
+仅仅是一种命名约定。在后面出现 $(BBSHOME) 等单词的地方，应把它们替换成对应的
+实际名字，而不是直接输入 $(BBSHOME)。
+
+    例 1：
+    如果本文中有一个命令是这样的：
+          ./configure --prefix=$(BBSHOME)
+
+    那么你不能直接在 shell 里面原封不动的输入上述命令，而应该根据你的实际情
+况，比如你想把 kbsbbs 安装在 /home/bbs 目录，那么 $(BBSHOME) 就被约定为 
+/home/bbs，于是在实际执行上述命令时，应把 $(BBSHOME) 替换为 /home/bbs，上述
+命令实际是指：
+          ./configure --prefix=/home/bbs
+
+    例 2：
+    如果本文中有一句话是这样的：把文件复制到 $(BBSHOME)/bin 目录。假设 
+$(BBSHOME) 还是被约定为 /home/bbs，那么"把文件复制到 $(BBSHOME)/bin 目录"
+的意思是"把文件复制到 /home/bbs/bin 目录"。
+
+    在开始安装以前，需要在系统内创建 bbs 用户和组，上述相关目录如果没有的话应
+该手工创建，并设置 bbs 用户为目录属主并可以读写。
+
+2.2 下载 kbsbbs 的代码包
+    下载 kbsbbs 的源代码有两种方法，一种是通过 svn 方式获取，另一种是下载每
+日更新的 kbsbbs-snapshot 代码包。用 svn 方式下载源代码请参考 doc/README.svn
+文件。把 kbsbbs 的代码包放在 $(SRCDIR) 目录，然后解开。
+
+    注意在 site/ 子目录里面有名字为 fb2k-v2.c 和 fb2k-v2.h 的文件，这两个文件
+是站点定制文件，本文以这两个文件为例子进行讲解。注意验证 fb2k-v2.h 文件中
+BBSUID 和 BBSGID 与本地系统的 bbs 用户的 uid gid 是否一致，如果不一致请调整到
+一致。
+
+    用如下命令可以验证这些 ID 是否一致：
+          grep "^#define.*BBSUID" fb2k-v2.h
+          grep "^#define.*BBSGID" fb2k-v2.h
+          grep "^bbs:" /etc/passwd
+
+    注：如果看不懂命令执行的结果，请先阅读 C 语言及 Unix 方面的书籍，再尝试安
+装 kbsbbs。
+
+2.3 安装 kbsbbs
+    同样切换到 $(SRCDIR) 目录，进入 kbsbbs 的源代码目录。
+
+    然后执行下面的一系列命令：
+          ./configure --prefix=$(BBSHOME) --enable-site=fb2k-v2 --enable-ssh --enable-ssl
+          make
+          make install
+          
+          make install-home
+          chown -R bbs:bbs $(BBSHOME) （最好用 root 执行）
+    
+    注意，这里最后两个命令的作用是把源代码 bbshome 目录下的重要数据文件复制到
+$(BBSHOME) 下去，创建必要的子目录并确保设置正确的权限。以后更改源代码的话，只
+需要在源代码目录下执行 make; make install; 即可，千万不要执行
+make install-home，因为执行的话就会丢失 bbs 数据！
+
+    注：一些常用 configure 参数说明。
+          --enable-site=SITE      告诉 kbsbbs 采用名为 SITE.h 和 SITE.c 的站
+                                  点定制文件，这两个文件必须放在 site/ 目录
+          --enable-ssh            启用 ssh 支持
+          --enable-ssl            启用 pop3s 支持
+
+2.4[可选] 初始化 BBS
+    以 $(BBSUID) 或者 root 身份执行 $(BBSHOME)/bin/bootstrap 以初始化 BBS
+    此程序会自动注册 guest 和 SYSOP，并建立 sysop 等系统基本版面
+
+3. 运行之前的配置
+    本节主要说明 ssh 方式的配置。
+
+3.1 ssh 方式
+    请参考 doc/INSTALL.ssh 文件。
+    懒人可以用如下命令产生最简单的可用的配置文件（不推荐）：
+        touch $(BBSHOME)/etc/sshd_config
+        ssh-keygen -t rsa1 -f $(BBSHOME)/etc/ssh_host_key
+
+4. 运行
+
+    注意只有需要开 < 1024 端口号服务的程序需要用 root 来启动，具体来说，
+bbsd (23端口)，sshbbsd (22端口) 需要用 root 身份来启动。
+
+4.1 运行 kbsbbs
+          cd $(BBSHOME)/bin
+          ./miscd daemon
+          ./bbslogd
+          ./bbsd -p 23
+          ./sshbbsd -p 22
+
+    然后 telnet localhost，注册 SYSOP 和 guest 两个帐号。
+    如果执行了步骤 2.4，则可跳过 SYSOP 和 guest 账号的注册。
+
+5. 其它
+    pop3s的支持在 configure 的时候加上 --enable-ssl，生成的 newpop3d
+将自动包含 pop3 和 pop3s 的支持。pop3s 支持需要一个证书，可以用 openssl 生成
+并放在 $(BBSHOME)/etc/bbs.crt 和 $(BBSHOME)/etc/bbs.key，比如：
+    openssl genrsa -out $(BBSHOME)/etc/bbs.key
+    openssl req -x509 -days 3650 -new -key bbs.key -out $(BBSHOME)/etc/bbs.crt
+
+    bbs 用户还需要一个 crontab 以便完成一些日常事务，请参考 doc/README.SYSOP。
+
+6. 新版Linux兼容性修正说明
+========================
+本版本已针对GCC 11+/Clang 14+等新一代Linux发行版（包括Debian 11/12等）做了最小必要的兼容性修正，主要包括：
+- 所有bzero全部替换为memset
+- 所有bcopy全部替换为memmove
+- 所有rindex全部替换为strrchr
+- 移除了<malloc.h>，仅保留<stdlib.h>
+- u_char、socklen_t等类型如未定义则补充typedef
+- 头文件包含和信号宏做了适配性调整
+- 其余如遇编译报错再做最小必要修正
+
+如需详细说明请参见doc/INSTALL.debian12。
+
+7. 其它
+--------------------------------------
+- 仅支持telnet/ssh登录，不含web服务、php、mysql等功能。
+- 其它问题请到水木社区 (newsmth.net) BBSMan_Dev 版讨论。

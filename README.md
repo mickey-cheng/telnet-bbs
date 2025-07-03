@@ -65,7 +65,7 @@ cd ~/kbsbbs_src
   cd /telnet-bbs-main/kbs_bbs/
   ```
 - 方式二：使用 git/svn
-  git clone https://github.com/mickey-cheng/telnet-bbs.git
+git clone https://github.com/mickey-cheng/telnet-bbs.git
 
 ### 3.2 检查站点定制文件
 

@@ -2,7 +2,7 @@
 
 一、关于本系统
 
-作为千禧年读大学的一代人，大学四年，通过学校的侏罗纪bbs论坛认识了很多朋友，fengyuner、xuanyesun、AbitOFaLA（这货马甲多的要命什么MaNSoN、CugKaMeNaShl、liulangzi）、cookie、cici、ttyy、congcon、taotao、xlwind、cinderella、czp、fzily、jessielee、NIC、chinaren、zdy、jwc等等，中间的很多人随着时光的流逝记忆已经很模糊了，但是那段岁月至今让人怀念。只可惜，随着高校对bbs论坛管理的加强，侏罗纪论坛从kbs bbs转为discuz，再到后面的完全关闭，过往的内容永远消失在时间的长河中。如今10多年过去了，中文互联网已经基本搜不到当年的贴子了，如今再回首当年的岁月，只能感叹青春再也回不来了。
+作为千禧年读大学的一代人，大学四年，通过学校的侏罗纪bbs论坛认识了很多朋友，fengyuner、xuanyesun、AbitOFaLA（这货马甲多的要命什么MaNSoN、CugKaMeNaShl、liulangzi）、cookie、cici、ttyy、congcon、taotao、xlwind、cinderella、czp、fzily、jessielee、NIC、chinaren、zdy、jwc等等，中间的很多人随着时光的流逝记忆已经很模糊了，但是那段岁月至今让人怀念。只可惜，随着高校对bbs论坛管理的加强，侏罗纪论坛从kbs bbs转为discuz，再到后面的完全关闭，过往的内容永远消失在时间的长河中。如今10多年过去了，中文互联网已经基本搜不到侏罗纪bbs的踪迹了，仿佛从来没有存在过一样。如今再回首当年的岁月，只能感叹青春再也回不来了。
 
 某一天突发奇想，能不能自己再把bbs搭起来，去感受感受telnet登录论坛的那种畅快感。但是kbs bbs已经闭源，最后能够找到的版本已经无法再最新的linux下进行安装，需要进行修改。同时，原来的kbs bbs使用了telnet+http的方式访问，在现在国内的环境下，搞个web论坛，那基本上是天方夜谭。基于上述两个理由，使用Cursor对代码进行了修改，删除了web部分代码，对原来不兼容的内容进行了修改（修改后还未测试过）。详细安装方式见\doc\INSTALL.debian12
 
